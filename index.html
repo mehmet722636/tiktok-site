@@ -1,0 +1,48 @@
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TikTok Video İndirici</title>
+  <style>
+    body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
+    input { width: 80%; padding: 10px; margin: 10px 0; }
+    button { padding: 10px 20px; font-size: 16px; }
+    #result { margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <h1>🎥 TikTok Video İndirici</h1>
+  <input type="text" id="videoUrl" placeholder="TikTok video linkini yapıştır">
+  <br>
+  <button onclick="indir()">İndir</button>
+  <div id="result"></div>
+
+  <script>
+    async function indir() {
+      const url = document.getElementById("videoUrl").value;
+      if (!url.includes("tiktok.com")) {
+        alert("Lütfen geçerli bir TikTok linki girin.");
+        return;
+      }
+      document.getElementById("result").innerHTML = "Videonuz getiriliyor...";
+      try {
+        const response = await fetch(`https://api.tiklydown.com/?url=${encodeURIComponent(url)}`);
+        const data = await response.json();
+        if (data.video_no_watermark) {
+          document.getElementById("result").innerHTML = \`
+            <a href="\${data.video_no_watermark}" target="_blank" download>
+              ✅ Videoyu İndir (Filigransız)
+            </a>
+          \`;
+        } else {
+          document.getElementById("result").innerHTML = "Video bulunamadı veya indirilemiyor.";
+        }
+      } catch (e) {
+        document.getElementById("result").innerHTML = "Bir hata oluştu.";
+      }
+    }
+  </script>
+</body>
+</html>
